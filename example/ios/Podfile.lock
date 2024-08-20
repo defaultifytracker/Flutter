@@ -1,0 +1,35 @@
+PODS:
+  - BMRT (1.0.6)
+  - defaultify_plugin (0.0.1):
+    - BMRT
+    - Flutter
+  - Flutter (1.0.0)
+  - integration_test (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - defaultify_plugin (from `.symlinks/plugins/defaultify_plugin/ios`)
+  - Flutter (from `Flutter`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
+
+SPEC REPOS:
+  trunk:
+    - BMRT
+
+EXTERNAL SOURCES:
+  defaultify_plugin:
+    :path: ".symlinks/plugins/defaultify_plugin/ios"
+  Flutter:
+    :path: Flutter
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
+
+SPEC CHECKSUMS:
+  BMRT: 814829d5dd5b25dd2c2050979c4342f20f636209
+  defaultify_plugin: d19870f356ba62d3e962c87fe5c7660336c359cd
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  integration_test: 13825b8a9334a850581300559b8839134b124670
+
+PODFILE CHECKSUM: 6360f34eb957d6c1b8fa21a2f6844ac57fb53a45
+
+COCOAPODS: 1.14.3
