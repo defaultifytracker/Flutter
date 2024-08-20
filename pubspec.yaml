@@ -11,6 +11,12 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
+  path_provider: ^2.0.11
+  uuid: ^4.4.2
+  convert: "^3.0.1"
+  stack_trace: ^1.11.1
+  package_info_plus: ^8.0.1
+  crypto: "^3.0.1"
 
 dev_dependencies:
   flutter_test:

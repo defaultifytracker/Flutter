@@ -2,7 +2,7 @@ group 'com.example.defaultify_plugin'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.7.10'
+    ext.kotlin_version = '1.8.20'
     repositories {
         google()
         mavenCentral()
@@ -14,10 +14,20 @@ buildscript {
     }
 }
 
-allprojects {
+rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url "https://gitlab.appinvent.in/api/v4/projects/4537/packages/maven"
+            credentials(HttpHeaderCredentials) {
+                name =  'Private-Token'
+                value =  'glpat-3HepPm-jnbA_48H4jgn3'
+            }
+            authentication {
+                header(HttpHeaderAuthentication)
+            }
+        }
     }
 }
 
@@ -29,7 +39,7 @@ android {
         namespace 'com.example.defaultify_plugin'
     }
 
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -46,12 +56,13 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 24
     }
 
     dependencies {
         testImplementation 'org.jetbrains.kotlin:kotlin-test'
         testImplementation 'org.mockito:mockito-core:5.0.0'
+        implementation 'com:defaultify:1.0.8.32'
     }
 
     testOptions {
