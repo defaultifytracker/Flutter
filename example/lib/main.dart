@@ -20,7 +20,7 @@ Future<void> launchDefaultify(
   if (Platform.isAndroid) {
     dftfyToken = "0c56d0ba-a589-4aae-9f7d-519fdf4f680b";
   } else if (Platform.isIOS) {
-    dftfyToken = "";
+    dftfyToken = "73ccdc4f-cbb1-493c-91ba-6a9b6bf652b8";
   }
   await DefaultifyPlugin.launch(dftfyToken);
   appRunner(true);
