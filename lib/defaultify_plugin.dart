@@ -14,9 +14,9 @@ import 'network.dart';
 import 'network_modal.dart';
 import 'route_observer.dart';
 
-class DefaultifyPlugin with WidgetsBindingObserver {
+class Defaultify with WidgetsBindingObserver {
 
-  static final DefaultifyPlugin _instance = DefaultifyPlugin._internal();
+  static final Defaultify _instance = Defaultify._internal();
   static const MethodChannel methodChannel = MethodChannel('defaultify_plugin');
   static ExceptionHandler? _exceptionHandler;
   static final CustomRouteObserver customRouteObserver = CustomRouteObserver();
@@ -42,11 +42,11 @@ class DefaultifyPlugin with WidgetsBindingObserver {
     });
   }
 
-  factory DefaultifyPlugin() {
+  factory Defaultify() {
     return _instance;
   }
 
-  DefaultifyPlugin._internal();
+  Defaultify._internal();
 
   // Method to get the screen list from the route observer
   List<Map<String, String>> getScreenList() {
@@ -79,7 +79,7 @@ class DefaultifyPlugin with WidgetsBindingObserver {
     await runZonedGuarded<FutureOr<void>>(() async {
       await launchCallback();
     }, (error, stackTrace) async {
-      await DefaultifyPlugin.logHandledException(error, stackTrace);
+      await Defaultify.logHandledException(error, stackTrace);
     });
 
     return Future.value(launched);

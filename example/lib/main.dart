@@ -22,7 +22,7 @@ Future<void> launchDefaultify(
   } else if (Platform.isIOS) {
     dftfyToken = "73ccdc4f-cbb1-493c-91ba-6a9b6bf652b8";
   }
-  await DefaultifyPlugin.launch(dftfyToken);
+  await Defaultify.launch(dftfyToken);
   appRunner(true);
 }
 
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      navigatorObservers: [DefaultifyPlugin.customRouteObserver],
+      navigatorObservers: [Defaultify.customRouteObserver],
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }

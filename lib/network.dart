@@ -88,7 +88,7 @@ void _registerCompleteEvent(NetworkLoggerHttpClientResponse response,
 
   eventData['responseHeaders'] = headers;
   try {
-    DefaultifyPlugin.registerNetworkEvent(eventData);
+    Defaultify.registerNetworkEvent(eventData);
   } catch (e) {
     if (kDebugMode) {
       print('Error registering network event: $e');
