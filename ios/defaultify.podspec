@@ -3,7 +3,7 @@
 # Run `pod lib lint defaultify_plugin.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'bmrt_plugin'
+  s.name             = 'defaultify'
   s.version          = '0.0.1'
   s.summary          = 'A new Flutter plugin project.'
   s.description      = <<-DESC

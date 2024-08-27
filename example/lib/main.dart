@@ -18,9 +18,9 @@ Future<void> launchDefaultify(
     void Function(bool isDftfyLaunched) appRunner) async {
   var dftfyToken = "";
   if (Platform.isAndroid) {
-    dftfyToken = "0c56d0ba-a589-4aae-9f7d-519fdf4f680b";
+    dftfyToken = "";
   } else if (Platform.isIOS) {
-    dftfyToken = "73ccdc4f-cbb1-493c-91ba-6a9b6bf652b8";
+    dftfyToken = "";
   }
   await Defaultify.launch(dftfyToken);
   appRunner(true);
