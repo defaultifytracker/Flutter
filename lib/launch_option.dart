@@ -72,8 +72,6 @@ class AndroidLaunchOptions extends LaunchOptions {
     serviceMode = constOptionServiceMode;
     this["forceVideoModeV3"] = constOptionForceVideoModeV3;
   }
-
-  /// Whether application Bmrt is contained within is running as service
   bool get serviceMode => tryCast(this["ServiceMode"], constOptionServiceMode);
   set serviceMode(bool value) {
     this["ServiceMode"] = value;

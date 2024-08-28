@@ -368,10 +368,10 @@ class NetworkLoggerHttpClientResponse implements HttpClientResponse {
   }
 }
 
-class BmrtHttpClient implements HttpClient {
+class DftyHttpClient implements HttpClient {
   final HttpClient _httpClient;
 
-  BmrtHttpClient([HttpClient? httpClient, SecurityContext? context])
+  DftyHttpClient([HttpClient? httpClient, SecurityContext? context])
       : _httpClient = httpClient ?? HttpClient(context: context);
 
   @override
@@ -752,6 +752,6 @@ class NetworkLoggerHttpClientRequest implements HttpClientRequest {
 class NetworkLoggerHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return BmrtHttpClient(super.createHttpClient(context));
+    return DftyHttpClient(super.createHttpClient(context));
   }
 }
