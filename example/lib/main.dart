@@ -16,13 +16,13 @@ Future<void> main() async {
 
 Future<void> launchDefaultify(
     void Function(bool isDftfyLaunched) appRunner) async {
-  var dftfyToken = "";
+  var token = "";
   if (Platform.isAndroid) {
-    dftfyToken = "";
+    token = "";
   } else if (Platform.isIOS) {
-    dftfyToken = "";
+    token = "";
   }
-  await Defaultify.launch(dftfyToken);
+  await Defaultify.launch(token);
   appRunner(true);
 }
 
