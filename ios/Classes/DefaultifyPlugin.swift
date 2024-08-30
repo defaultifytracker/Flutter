@@ -17,7 +17,7 @@ public class DefaultifyPlugin: NSObject, FlutterPlugin {
                 if #available(iOS 13.0, *) {
                     if let args = call.arguments as? [String: Any],
                        let code = args["token"] as? String {
-                        BMRT.launch(token: code)
+                        DFTFY.launch(token: code)
                         result("Launch successful")
                     } else {
                         result(FlutterError(code: "INVALID_ARGUMENT", message: "Invalid argument for 'code'", details: nil))
