@@ -1,8 +1,5 @@
-# Defaultify_plugin
 
-A new Flutter project.
-
-# Plugin for flutter
+# Defaultify for flutter
 
 <hr />
 
