@@ -1,6 +1,6 @@
 import Flutter
 import UIKit
-import BMRTSDK
+import Defaultify
 
 public class DefaultifyPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
