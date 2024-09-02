@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
@@ -15,7 +14,6 @@ import 'network_modal.dart';
 import 'route_observer.dart';
 
 class Defaultify with WidgetsBindingObserver {
-
   static final Defaultify _instance = Defaultify._internal();
   static const MethodChannel methodChannel = MethodChannel('defaultify_plugin');
   static ExceptionHandler? _exceptionHandler;
@@ -52,7 +50,7 @@ class Defaultify with WidgetsBindingObserver {
   List<Map<String, String>> getScreenList() {
     return customRouteObserver.screenList.map((screenInfo) {
       String screenName =
-      screenInfo.screenName == '/' ? 'Initial' : screenInfo.screenName;
+          screenInfo.screenName == '/' ? 'Initial' : screenInfo.screenName;
       return {
         'screenName': screenName,
         'startTime': screenInfo.startTime.toString(),
@@ -90,9 +88,7 @@ class Defaultify with WidgetsBindingObserver {
     initialize();
     // either use provided options, or fallback to explicit defaults
     setLaunchOptions(launchOptions ?? getDefaultLaunchOptions());
-    var params = <String, dynamic>{
-      'token': appToken
-    };
+    var params = <String, dynamic>{'token': appToken};
     var launched =
         ((await methodChannel.invokeMethod('launch', params)) ?? 0) != 0;
     if (launched) {
@@ -105,7 +101,6 @@ class Defaultify with WidgetsBindingObserver {
   }
 
   static void registerNetworkEvent(Map<String, dynamic> eventData) {
-
     _callbacks?.networkFilterCallback(eventData).then((filteredEvent) {
       if (filteredEvent != null) {
         methodChannel.invokeMethod('registerNetworkEvent', filteredEvent);
@@ -130,7 +125,7 @@ class Defaultify with WidgetsBindingObserver {
       }
       ui.Image image = await boundary.toImage(pixelRatio: 2.0);
       ByteData? byteData =
-      await image.toByteData(format: ui.ImageByteFormat.png);
+          await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List pngBytes = byteData!.buffer.asUint8List();
       String filePath = await _saveImageToFile(pngBytes);
       String uri = Uri.file(filePath).toString();
@@ -181,5 +176,4 @@ class Defaultify with WidgetsBindingObserver {
     await file.writeAsBytes(imageBytes);
     return filePath;
   }
-
 }

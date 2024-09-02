@@ -7,13 +7,13 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 class MockDefaultifyPluginPlatform
     with MockPlatformInterfaceMixin
     implements DefaultifyPluginPlatform {
-
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
 }
 
 void main() {
-  final DefaultifyPluginPlatform initialPlatform = DefaultifyPluginPlatform.instance;
+  final DefaultifyPluginPlatform initialPlatform =
+      DefaultifyPluginPlatform.instance;
 
   test('$MethodChannelDefaultifyPlugin is the default instance', () {
     expect(initialPlatform, isInstanceOf<MethodChannelDefaultifyPlugin>());

@@ -47,10 +47,10 @@ _wrapResponse(HttpClientResponse response, String requestID, String originalUrl,
 
 void _registerCompleteEvent(NetworkLoggerHttpClientResponse response,
     [String? noBodyReason,
-      String? body,
-      String? requestbody,
-      Map<String, String>? requestHeaders,
-      int? timestamp]) {
+    String? body,
+    String? requestbody,
+    Map<String, String>? requestHeaders,
+    int? timestamp]) {
   var isError = response.statusCode >= 400;
   var eventData = <String, dynamic>{
     'id': response.requestID,
@@ -184,7 +184,7 @@ class NetworkLoggerHttpClientResponse implements HttpClientResponse {
 
   @override
   Future<List<int>> firstWhere(bool Function(List<int> element) test,
-      {List<int> Function()? orElse}) =>
+          {List<int> Function()? orElse}) =>
       _wrapperStream!.firstWhere(test, orElse: orElse);
 
   @override
@@ -192,7 +192,7 @@ class NetworkLoggerHttpClientResponse implements HttpClientResponse {
 
   @override
   StreamSubscription<List<int>> listen(void Function(List<int> event)? onData,
-      {Function? onError, void Function()? onDone, bool? cancelOnError}) =>
+          {Function? onError, void Function()? onDone, bool? cancelOnError}) =>
       _wrapperStream!.listen(onData,
           onError: onError, onDone: onDone, cancelOnError: cancelOnError);
 
@@ -202,7 +202,7 @@ class NetworkLoggerHttpClientResponse implements HttpClientResponse {
 
   @override
   Future<List<int>> reduce(
-      List<int> Function(List<int> previous, List<int> element) combine) =>
+          List<int> Function(List<int> previous, List<int> element) combine) =>
       _wrapperStream!.reduce(combine);
 
   @override
@@ -210,23 +210,23 @@ class NetworkLoggerHttpClientResponse implements HttpClientResponse {
 
   @override
   Future<List<int>> singleWhere(bool Function(List<int> element) test,
-      {List<int> Function()? orElse}) =>
+          {List<int> Function()? orElse}) =>
       _wrapperStream!.singleWhere(test, orElse: orElse);
 
   @override
   Stream<List<int>> asBroadcastStream(
-      {void Function(StreamSubscription<List<int>>)? onListen,
-        void Function(StreamSubscription<List<int>>)? onCancel}) =>
+          {void Function(StreamSubscription<List<int>>)? onListen,
+          void Function(StreamSubscription<List<int>>)? onCancel}) =>
       _wrapperStream!.asBroadcastStream(onListen: onListen, onCancel: onCancel);
 
   @override
   Stream<List<int>> distinct(
-      [bool Function(List<int> previous, List<int> next)? equals]) =>
+          [bool Function(List<int> previous, List<int> next)? equals]) =>
       _wrapperStream!.distinct(equals);
 
   @override
   Future<E> fold<E>(
-      E initialValue, E Function(E previous, List<int> element) combine) =>
+          E initialValue, E Function(E previous, List<int> element) combine) =>
       _wrapperStream!.fold(initialValue, combine);
 
   @override
@@ -235,7 +235,7 @@ class NetworkLoggerHttpClientResponse implements HttpClientResponse {
 
   @override
   Stream<List<int>> handleError(Function onError,
-      {bool Function(dynamic)? test}) =>
+          {bool Function(dynamic)? test}) =>
       _wrapperStream!.handleError(onError, test: test);
 
   @override
@@ -250,7 +250,7 @@ class NetworkLoggerHttpClientResponse implements HttpClientResponse {
 
   @override
   Future<List<int>> lastWhere(bool Function(List<int> element) test,
-      {List<int> Function()? orElse}) =>
+          {List<int> Function()? orElse}) =>
       _wrapperStream!.lastWhere(test, orElse: orElse);
 
   @override
@@ -272,7 +272,7 @@ class NetworkLoggerHttpClientResponse implements HttpClientResponse {
 
   @override
   Stream<List<int>> timeout(Duration timeLimit,
-      {void Function(EventSink<List<int>> sink)? onTimeout}) =>
+          {void Function(EventSink<List<int>> sink)? onTimeout}) =>
       _wrapperStream!.timeout(timeLimit, onTimeout: onTimeout);
 
   @override
@@ -430,8 +430,8 @@ class DftyHttpClient implements HttpClient {
   @override
   set authenticateProxy(
       Future<bool> Function(
-          String host, int port, String scheme, String? realm)?
-      f) {
+              String host, int port, String scheme, String? realm)?
+          f) {
     _httpClient.authenticateProxy = f;
   }
 
@@ -525,8 +525,8 @@ class DftyHttpClient implements HttpClient {
   @override
   set connectionFactory(
       Future<ConnectionTask<Socket>> Function(
-          Uri url, String? proxyHost, int? proxyPort)?
-      f) {
+              Uri url, String? proxyHost, int? proxyPort)?
+          f) {
     _httpClient.connectionFactory = f;
   }
 

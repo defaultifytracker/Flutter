@@ -3,10 +3,6 @@ import 'package:defaultify_plugin/defaultify_plugin.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-// void main() {
-//   runApp(const MyApp());
-// }
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await launchDefaultify((bool isDftfyLaunched) async {

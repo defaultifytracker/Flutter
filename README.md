@@ -17,31 +17,28 @@ Install Defaultify plugin into your dart project by adding it to dependencies in
 
 ```yaml
 dependencies:
-  TestDefaultify_flutter:
-    git:
-      url: https://github.com/defaultifytracker/FlutterDevelopment.git
-      # ref: 1.2.3 # if forcing a specific version by tag or branch
+  defaultify: ^1.0.0
 ```
 
 ## Launching
 
 ```dart
-import 'package:TestDefaultify_flutter/test_Defaultify.dart';
+import 'package:defaultify_plugin/defaultify_plugin.dart';
 
-Future<Null> launchDefaultify(Function(bool isTestDefaultifyLaunched) appRunner) async {
-  var launchOptions;
+Future<void> launchDefaultify(
+    void Function(bool isDftfyLaunched) appRunner) async {
   var token = "";
-
   if (Platform.isAndroid) {
-    token = "<android app token>";
+    token = "";
   } else if (Platform.isIOS) {
-    token = "<ios app token>";
+    token = "";
   }
-
   await Defaultify.launch(token);
+  appRunner(true);
 }
 
-Future<Null> main() async {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await launchDefaultify((bool isDftfyLaunched) async {
     runApp(const MyApp());
   });

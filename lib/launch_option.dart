@@ -26,7 +26,6 @@ abstract class LaunchOptions {
     crashReport = true;
     maxNetworkBodySize = constOptionMaxNetworkBodySize;
     captureDeviceAndNetworkNames = constOptionCaptureDeviceAndNetworkNames;
-
   }
 
   /// Catch and report application crashes
@@ -34,8 +33,6 @@ abstract class LaunchOptions {
   set crashReport(bool value) {
     this["CrashReport"] = value;
   }
-
-
 
   /// The maximal size of network request/response body.
   int get maxNetworkBodySize =>
@@ -72,6 +69,7 @@ class AndroidLaunchOptions extends LaunchOptions {
     serviceMode = constOptionServiceMode;
     this["forceVideoModeV3"] = constOptionForceVideoModeV3;
   }
+
   bool get serviceMode => tryCast(this["ServiceMode"], constOptionServiceMode);
   set serviceMode(bool value) {
     this["ServiceMode"] = value;

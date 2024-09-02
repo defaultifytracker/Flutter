@@ -1,7 +1,8 @@
-name: defaultify_plugin
+name: defaultify
 description: "Defaultify Plugin Flutter SDK and defaultify reports include video of user actions, network traffic, console logs and many other important traces from your app."
-version: 0.0.6
-homepage:
+version: 1.0.1
+homepage: https://github.com/defaultifytracker/Flutter.git
+repository: https://github.com/defaultifytracker/Flutter.git
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
