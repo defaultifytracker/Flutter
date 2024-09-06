@@ -17,8 +17,11 @@ inline fun <reified T : Activity> Activity.startAndFinishActivity(vararg data: P
                     is Int -> putInt(key, value)
                     is Boolean -> putBoolean(key, value)
                     is String -> putString(key, value)
+
                     is Parcelable -> putParcelable(key, value) // Handle Parcelable data
-                    is ArrayList<*> -> putString(key, Gson().toJson(value))
+                    is ArrayList<*> -> {
+                        putString(key, Gson().toJson(value))
+                    }
                 }
             }
         })
