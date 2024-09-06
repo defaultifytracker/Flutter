@@ -13,10 +13,7 @@ import androidx.core.app.ActivityCompat
 import com.defaultify.Defaultify
 import com.defaultify.DefaultifyActivity
 import com.defaultify.EventApplication
-import com.defaultify.EventApplication.isDFTFYActivityOpen
-import com.defaultify.EventApplication.isFromDFTFYActivity
-import com.defaultify.EventApplication.isRecordingPermissionDenied
-import com.defaultify.EventApplication.isRecordingPermissionPopUpShown
+
 import com.defaultify.baseclass.ShakeDetectorNewCallBack
 import com.defaultify.network.model.requestPayload.DeviceDetailsPayload
 import com.defaultify.network.model.requestPayload.NetworkTraceInfo
@@ -48,7 +45,7 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
 
   private var dftyDataManager : DefaultifyDataManager?=null
 
-  private var  networklist = ArrayList<NetworkTraceInfo>()
+
 
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "defaultify_plugin")
@@ -84,10 +81,7 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
 
 
   private fun registerNetworkEvent(call: MethodCall, result: MethodChannel.Result) {
-    //  val eventData: Map<String, Any>? = call.arguments()
-    Log.e("networklist","registerNetworkEvent")
     val eventData = call.arguments as? Map<String, Any>
-    Log.e("networklist","registerNetworkEvent"+eventData)
     eventData?.let {eventData->
       val networkEvent= NetworkTraceInfo()
       val requestTime =
@@ -101,9 +95,8 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
       networkEvent.requestPayload = getParamOrDefault<String>(eventData, "requestPayload", "")
       networkEvent.requestHeaders = parseHeaders(eventData["headers"] as? Map<String, String>)
       networkEvent.responseHeaders = parseResponseHeaders(eventData["responseHeaders"] as? Map<String, String>)
-      Log.e("networklist","networkEvent"+networkEvent)
-      networklist.add(networkEvent)
-      Log.e("networklist","networklist"+networklist)
+      EventApplication.networkList.add(networkEvent)
+
 
     }
 
@@ -134,7 +127,6 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
   }
 
   private fun parseHeaders(headersMap: Map<String, String>?): NetworkTraceInfo.RequestHeaders {
-    Log.e("headersMap","headersMap "+headersMap)
     return NetworkTraceInfo.RequestHeaders(
       headersMap?.get("accept-language"),
       headersMap?.get("authorization"),
@@ -147,7 +139,6 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
   }
 
   private fun parseResponseHeaders(headersMap: Map<String, String>?): NetworkTraceInfo.ResponseHeaders {
-    Log.e("headersMap", "headersMap " + headersMap)
     return NetworkTraceInfo.ResponseHeaders(
       headersMap?.get("access-control-allow-origin"),
       headersMap?.get("content-length"),
@@ -163,7 +154,6 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
 
   private fun log(call: MethodCall, result: MethodChannel.Result) {
     val reason: String? = call.argument("text")
-    Log.e("Eddddddd","Logname "+reason)
     result.success(null)
   }
   private class FlutterManagedException(message: String?) : Exception(message) {
@@ -176,7 +166,6 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
     val reason: String? = call.argument("reason")
     val stackTrace: List<String>? = call.argument("stackTrace") ?: emptyList()
 
-    Log.e("Exception", "crash: $reason")
     Defaultify.logException(reason,name,stackTrace)
     result.success(null)
   }
@@ -184,11 +173,10 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
   private fun handleShakeEvent(arguments: Map<String, Any>?) {
     // Get URI from Flutter, perform actions
     val uri = arguments?.get("uri") as? String
-    Log.e("LaunchTest", "handleShakeEvent" + uri)
 
     val screenList = arguments?.get("screenList") as? List<Map<String, String>>
 
-    var topViewList = ArrayList<DeviceDetailsPayload.Metadata.TopView>()
+    val topViewList = ArrayList<DeviceDetailsPayload.Metadata.TopView>()
 
     if (screenList != null) {
       for (screen in screenList) {
@@ -202,26 +190,22 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
         topViewList.add(topView)
       }
     }
-    Log.e("screenList", "handleShakeEvent screenList" + screenList)
-    Log.e("screenList", "handleShakeEvent topViewList" + topViewList)
-    Log.e("screenList", "handleShakeEvent topViewList" + uri)
+    EventApplication.topViewList=topViewList
     val topViewListJson = Gson().toJson(topViewList)
-    val networkListJson= Gson().toJson(networklist)
-
     if (!uri.isNullOrEmpty()) {
       activity?.startAndFinishActivity<DefaultifyActivity>(
         IntentConstant.URI to uri,
         "topViewList" to topViewListJson,
-        "networkList" to networkListJson
+        "platform_key" to "Flutter"
       )
     } else {
-      Log.e("URI_NOT_FOUND", "URI argument missing")
       activity?.startAndFinishActivity<DefaultifyActivity>(
         "topViewList" to topViewListJson,
-        "networkList" to networkListJson
+        "platform_key" to "Flutter"
       )
 
     }
+
     EventApplication.isDFTFYActivityOpen = true
     activity?.let { Defaultify.stopRecording(it) }
 
@@ -237,8 +221,8 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
         activity?.let {
           if (EventApplication.isFromDFTFYActivity) {
             EventApplication.isFromDFTFYActivity =false
-            Log.e("TestCalllledddd", "App Resume")
-            dftyDataManager = DefaultifyDataManager(it)
+            Log.e("AppLifecycleState", "App Resume")
+            dftyDataManager = DefaultifyDataManager(it,"Flutter")
             dftyDataManager?.permissionBridge{
               askPermission()
             }
@@ -267,7 +251,6 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
   }
   private fun launch(call: MethodCall, result: MethodChannel.Result) {
     this.result = result
-    // appToken = call.argument("token")
     appToken =  call.argument<String>("token") ?: ""
     startDFTFY()
 
@@ -294,9 +277,9 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
 
   private fun startDFTFY() {
 
-    Log.e("LaynchTest","appToken "+appToken)
+    Log.e("Token","appToken "+appToken)
     activity?.let {
-      dftyDataManager= DefaultifyDataManager(it)
+      dftyDataManager= DefaultifyDataManager(it,"Flutter")
       dftyDataManager?.permissionBridge{
         askPermission()
       }
@@ -406,7 +389,7 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
       if(EventApplication.isScreenShotEnable)
         channel.invokeMethod("handleShakeEvent", null)
       else
-        it.startAndFinishActivity<DefaultifyActivity>()
+        it.startAndFinishActivity<DefaultifyActivity>("platform_key" to "Flutter")
     }
   }
   fun askPermission() {
