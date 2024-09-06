@@ -1,7 +1,7 @@
 PODS:
-  - BMRT (1.0.6)
+  - Defaultify (1.0.0)
   - defaultify_plugin (0.0.1):
-    - BMRT
+    - Defaultify
     - Flutter
   - Flutter (1.0.0)
   - integration_test (0.0.1):
@@ -21,7 +21,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - BMRT
+    - Defaultify
 
 EXTERNAL SOURCES:
   defaultify_plugin:
@@ -36,13 +36,13 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
 
 SPEC CHECKSUMS:
-  BMRT: 814829d5dd5b25dd2c2050979c4342f20f636209
-  defaultify_plugin: d19870f356ba62d3e962c87fe5c7660336c359cd
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  integration_test: 13825b8a9334a850581300559b8839134b124670
-  package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
+  Defaultify: e6e118573f6c9f98610b533ea7aa5a3f49b0da26
+  defaultify_plugin: d1e16fd9816be6480d9ad05cba9230a19b05d472
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  integration_test: ce0a3ffa1de96d1a89ca0ac26fca7ea18a749ef4
+  package_info_plus: 58f0028419748fad15bf008b270aaa8e54380b1c
   path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
 
-PODFILE CHECKSUM: 6360f34eb957d6c1b8fa21a2f6844ac57fb53a45
+PODFILE CHECKSUM: 8b3b2d8e1a3740272f18ab59553845c9c1e2f5fc
 
 COCOAPODS: 1.14.3
