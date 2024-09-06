@@ -42,6 +42,7 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
   private lateinit var context: Context
   private  var shakeDetector: ShakeDetectorNewCallBack? = null
   private lateinit var appToken:String
+  private var  networklist = ArrayList<NetworkTraceInfo>()
 
   private var dftyDataManager : DefaultifyDataManager?=null
 
@@ -95,8 +96,8 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
       networkEvent.requestPayload = getParamOrDefault<String>(eventData, "requestPayload", "")
       networkEvent.requestHeaders = parseHeaders(eventData["headers"] as? Map<String, String>)
       networkEvent.responseHeaders = parseResponseHeaders(eventData["responseHeaders"] as? Map<String, String>)
-      EventApplication.networkList.add(networkEvent)
-
+//      EventApplication.networkList.add(networkEvent)
+      networklist.add(networkEvent)
 
     }
 
@@ -190,23 +191,44 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
         topViewList.add(topView)
       }
     }
-    EventApplication.topViewList=topViewList
+
     val topViewListJson = Gson().toJson(topViewList)
+    val networkListJson= Gson().toJson(networklist)
+
     if (!uri.isNullOrEmpty()) {
       activity?.startAndFinishActivity<DefaultifyActivity>(
         IntentConstant.URI to uri,
         "topViewList" to topViewListJson,
-        "platform_key" to "Flutter"
+        "networkList" to networkListJson
       )
     } else {
+      Log.e("URI_NOT_FOUND", "URI argument missing")
       activity?.startAndFinishActivity<DefaultifyActivity>(
         "topViewList" to topViewListJson,
-        "platform_key" to "Flutter"
+        "networkList" to networkListJson
       )
 
     }
-
     EventApplication.isDFTFYActivityOpen = true
+
+
+//    EventApplication.topViewList=topViewList
+//    val topViewListJson = Gson().toJson(topViewList)
+//    if (!uri.isNullOrEmpty()) {
+//      activity?.startAndFinishActivity<DefaultifyActivity>(
+//        IntentConstant.URI to uri,
+//        "topViewList" to topViewListJson,
+//        "platform_key" to "Flutter"
+//      )
+//    } else {
+//      activity?.startAndFinishActivity<DefaultifyActivity>(
+//        "topViewList" to topViewListJson,
+//        "platform_key" to "Flutter"
+//      )
+//
+//    }
+//
+//    EventApplication.isDFTFYActivityOpen = true
     activity?.let { Defaultify.stopRecording(it) }
 
   }
@@ -222,7 +244,7 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
           if (EventApplication.isFromDFTFYActivity) {
             EventApplication.isFromDFTFYActivity =false
             Log.e("AppLifecycleState", "App Resume")
-            dftyDataManager = DefaultifyDataManager(it,"Flutter")
+            dftyDataManager = DefaultifyDataManager(it)
             dftyDataManager?.permissionBridge{
               askPermission()
             }
@@ -279,7 +301,7 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
 
     Log.e("Token","appToken "+appToken)
     activity?.let {
-      dftyDataManager= DefaultifyDataManager(it,"Flutter")
+      dftyDataManager= DefaultifyDataManager(it)
       dftyDataManager?.permissionBridge{
         askPermission()
       }
