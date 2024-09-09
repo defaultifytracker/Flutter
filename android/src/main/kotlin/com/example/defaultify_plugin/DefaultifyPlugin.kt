@@ -2,11 +2,13 @@ package com.example.defaultify_plugin
 
 
 import android.Manifest
+import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.projection.MediaProjectionManager
+import android.os.Build
 import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.core.app.ActivityCompat
@@ -20,7 +22,7 @@ import com.defaultify.network.model.requestPayload.NetworkTraceInfo
 import com.defaultify.screenRecording.DefaultifyDataManager
 import com.defaultify.utils.IntentConstant
 
-import com.google.gson.Gson
+
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -30,10 +32,13 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
 import java.text.SimpleDateFormat
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
-/** DefaultifyPlugin */
+
 class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginRegistry.RequestPermissionsResultListener, PluginRegistry.ActivityResultListener {
 
   private lateinit var channel: MethodChannel
@@ -138,18 +143,34 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
     )
   }
 
+
   private fun parseResponseHeaders(headersMap: Map<String, String>?): NetworkTraceInfo.ResponseHeaders {
     return NetworkTraceInfo.ResponseHeaders(
       headersMap?.get("access-control-allow-origin"),
       headersMap?.get("content-length"),
       null,
       headersMap?.get("content-type"),
-      null,null,null,headersMap?.get("date"),null,null,null,null,null,null,headersMap?.get("x-amz-apigw-id"),null,
+      null,null,null,convertDateHeader(headersMap?.get("date")),null,null,null,null,null,null,headersMap?.get("x-amz-apigw-id"),null,
       headersMap?.get("x-amzn-trace-id"),null,null,null,null,null,null,null,null,null
     )
 
 
   }
+
+  @TargetApi(Build.VERSION_CODES.O)
+  private fun convertDateHeader(dateHeader: String?): String? {
+    return try {
+      dateHeader?.let {
+        val formatter = DateTimeFormatter.RFC_1123_DATE_TIME
+        val gmtTime = ZonedDateTime.parse(it, formatter)
+        val localTime = gmtTime.withZoneSameInstant(ZoneId.systemDefault())
+        DateTimeFormatter.RFC_1123_DATE_TIME.format(localTime)
+      }
+    } catch (e: Exception) {
+      null // Return null if parsing fails
+    }
+  }
+
 
 
   private fun log(call: MethodCall, result: MethodChannel.Result) {
@@ -191,19 +212,16 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
       }
     }
     EventApplication.topViewList=topViewList
-    val topViewListJson = Gson().toJson(topViewList)
-    if (!uri.isNullOrEmpty()) {
-      activity?.startAndFinishActivity<DefaultifyActivity>(
-        IntentConstant.URI to uri,
-        "topViewList" to topViewListJson,
-        "platform_key" to "Flutter"
-      )
-    } else {
-      activity?.startAndFinishActivity<DefaultifyActivity>(
-        "topViewList" to topViewListJson,
-        "platform_key" to "Flutter"
-      )
 
+    if (!uri.isNullOrEmpty()) {
+      val intent = Intent(activity, DefaultifyActivity::class.java)
+      intent.putExtra(IntentConstant.URI, uri)
+      intent.putExtra("platform_key", "Flutter")
+      activity?.startActivity(intent)
+    } else {
+      val intent = Intent(activity, DefaultifyActivity::class.java)
+      intent.putExtra("platform_key", "Flutter")
+      activity?.startActivity(intent)
     }
 
     EventApplication.isDFTFYActivityOpen = true
@@ -216,7 +234,7 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
     when (state) {
       "AppLifecycleState.resumed" -> {
         // App is in foreground
-        Log.e("AppLifecycleState", "App is in foreground")
+        Log.e("AppLifecycleState", "App is in foreground"+EventApplication.isFromDFTFYActivity)
 
         activity?.let {
           if (EventApplication.isFromDFTFYActivity) {
@@ -277,7 +295,6 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
 
   private fun startDFTFY() {
 
-    Log.e("Token","appToken "+appToken)
     activity?.let {
       dftyDataManager= DefaultifyDataManager(it,"Flutter")
       dftyDataManager?.permissionBridge{
@@ -361,15 +378,12 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
       if (resultCode == Activity.RESULT_OK) {
         EventApplication.isRecordingPermissionPopUpShown = false
         EventApplication.result = ActivityResult(resultCode, data)
-        // startDFTFY()
         dftyDataManager?.startRecordingPlugin()
         return true
       }
       else if(resultCode == Activity.RESULT_CANCELED){
         EventApplication.isRecordingPermissionDenied = true
         EventApplication.isRecordingPermissionPopUpShown = false
-
-        //startDFTFY()
         dftyDataManager?.startRecordingPlugin()
         return true
       }
@@ -389,7 +403,11 @@ class DefaultifyPlugin: FlutterPlugin, MethodCallHandler,ActivityAware,PluginReg
       if(EventApplication.isScreenShotEnable)
         channel.invokeMethod("handleShakeEvent", null)
       else
-        it.startAndFinishActivity<DefaultifyActivity>("platform_key" to "Flutter")
+      {
+        val intent = Intent(activity, DefaultifyActivity::class.java)
+        intent.putExtra("platform_key", "Flutter")
+        it.startActivity(intent)
+      }
     }
   }
   fun askPermission() {

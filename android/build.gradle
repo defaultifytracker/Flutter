@@ -18,16 +18,7 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url "https://gitlab.appinvent.in/api/v4/projects/4676/packages/maven"
-            credentials(HttpHeaderCredentials) {
-                name =  'Private-Token'
-                value =  'glpat-3HepPm-jnbA_48H4jgn3'
-            }
-            authentication {
-                header(HttpHeaderAuthentication)
-            }
-        }
+
     }
 }
 
@@ -62,7 +53,8 @@ android {
     dependencies {
         testImplementation 'org.jetbrains.kotlin:kotlin-test'
         testImplementation 'org.mockito:mockito-core:5.0.0'
-        implementation 'com:defaultify:1.0.0'
+       /* implementation 'com:defaultify:1.0.91'*/
+        implementation("com.defaultify.defaultify:-android:1.0.0")
     }
 
     testOptions {
